@@ -49,19 +49,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails user = User.builder()
                 .username("bingo")
                 .password(passwordEncoder.encode("password"))
-                .roles(UserRoles.STUDENT.name()) //ROLE_STUDENT (how spring security will see the role)
+                //.roles(UserRoles.STUDENT.name()) //ROLE_STUDENT (how spring security will see the role)
+                .authorities(UserRoles.STUDENT.getGrantedAuthority()) //changed roles to authorities to show difference in syntax/execution
                 .build();
 
         UserDetails admin = User.builder()
                 .username("flare")
                 .password(passwordEncoder.encode("password123"))
-                .roles(UserRoles.ADMIN.name())
+                //.roles(UserRoles.ADMIN.name())
+                .authorities(UserRoles.ADMIN.getGrantedAuthority())
                 .build();
 
         UserDetails adminTrainee = User.builder()
                 .username("midnight")
                 .password(passwordEncoder.encode("123password"))
-                .roles(UserRoles.ADMINTRAINEE.name())
+                //.roles(UserRoles.ADMINTRAINEE.name())
+                .authorities(UserRoles.ADMINTRAINEE.getGrantedAuthority())
                 .build();
 
         return new InMemoryUserDetailsManager(
