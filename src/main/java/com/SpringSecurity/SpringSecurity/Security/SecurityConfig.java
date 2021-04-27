@@ -43,8 +43,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .password(passwordEncoder.encode("password"))
                 .roles("STUDENT") //ROLE_STUDENT (how spring security will see the role)
                 .build();
+
+        UserDetails admin = User.builder()
+                .username("flare")
+                .password(passwordEncoder.encode("password123"))
+                .roles("ADMIN")
+                .build();
+
         return new InMemoryUserDetailsManager(
-                user
+                user,
+                admin
         );
     }
 }
