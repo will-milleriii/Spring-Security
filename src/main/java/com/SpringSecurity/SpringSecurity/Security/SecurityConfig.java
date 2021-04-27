@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import java.security.Permission;
 
@@ -32,6 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()//TODO temporarily disabled but will enable later
+//                .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                .and()
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(UserRoles.STUDENT.name())
@@ -42,7 +45,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic(); // TODO -- using basic authentication (CANNOT LOGOUT OF BASIC AUTH ****)
+                //.httpBasic(); // TODO -- using basic authentication (CANNOT LOGOUT OF BASIC AUTH ****)
+                .formLogin() //switching from basic auth to form login
+                .loginPage("/login").permitAll()
+                .defaultSuccessUrl("/courses", true);
+
     }
 
     @Override
