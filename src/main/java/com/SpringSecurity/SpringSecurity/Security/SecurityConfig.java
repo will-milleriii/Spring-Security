@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+import java.security.Permission;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -27,8 +29,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/", "index", "/css/*", "/js/*")
-                .permitAll()
+                .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
+                .antMatchers("/api/**").hasRole(UserRoles.STUDENT.name())
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -41,18 +43,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails user = User.builder()
                 .username("bingo")
                 .password(passwordEncoder.encode("password"))
-                .roles("STUDENT") //ROLE_STUDENT (how spring security will see the role)
+                .roles(UserRoles.STUDENT.name()) //ROLE_STUDENT (how spring security will see the role)
                 .build();
 
         UserDetails admin = User.builder()
                 .username("flare")
                 .password(passwordEncoder.encode("password123"))
-                .roles("ADMIN")
+                .roles(UserRoles.ADMIN.name())
+                .build();
+
+        UserDetails adminTrainee = User.builder()
+                .username("midnight")
+                .password(passwordEncoder.encode("123password"))
+                .roles(UserRoles.ADMINTRAINEE.name())
                 .build();
 
         return new InMemoryUserDetailsManager(
                 user,
-                admin
+                admin,
+                adminTrainee
         );
     }
 }
