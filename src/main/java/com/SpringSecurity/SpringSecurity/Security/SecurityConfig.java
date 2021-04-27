@@ -3,6 +3,7 @@ package com.SpringSecurity.SpringSecurity.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -32,6 +33,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(UserRoles.STUDENT.name())
+                .antMatchers(HttpMethod.DELETE, "/management/api/**").hasAuthority(Permissions.COURSE_WRITE.name())
+                .antMatchers(HttpMethod.POST, "/management/api/**").hasAuthority(Permissions.COURSE_WRITE.name())
+                .antMatchers(HttpMethod.PUT, "/management/api/**").hasAuthority(Permissions.COURSE_WRITE.name())
+                .antMatchers("/management/api/**").hasAnyRole(UserRoles.ADMIN.name(), UserRoles.ADMINTRAINEE.name())
                 .anyRequest()
                 .authenticated()
                 .and()
