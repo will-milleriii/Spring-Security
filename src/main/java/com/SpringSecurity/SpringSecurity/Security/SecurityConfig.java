@@ -16,6 +16,7 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import java.security.Permission;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 @EnableWebSecurity
@@ -48,7 +49,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //.httpBasic(); // TODO -- using basic authentication (CANNOT LOGOUT OF BASIC AUTH ****)
                 .formLogin() //switching from basic auth to form login
                 .loginPage("/login").permitAll()
-                .defaultSuccessUrl("/courses", true);
+                .defaultSuccessUrl("/courses", true)
+                .and()
+                .rememberMe().tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(2)).key("SecureKey"); //set remember me sessions to 2 day's time
 
     }
 
