@@ -49,10 +49,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 //.httpBasic(); // TODO -- using basic authentication (CANNOT LOGOUT OF BASIC AUTH ****)
                 .formLogin() //switching from basic auth to form login
-                .loginPage("/login").permitAll()
-                .defaultSuccessUrl("/courses", true)
+                    .loginPage("/login")
+                    .permitAll()
+                    .defaultSuccessUrl("/courses", true)
+                    .passwordParameter("password")
+                    .usernameParameter("username")
                 .and()
-                .rememberMe().tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(2)).key("SecureKey") //set remember me sessions to 2 day's time
+                .rememberMe()
+                    .tokenValiditySeconds((int)TimeUnit.DAYS.toSeconds(2)).key("SecureKey") //set remember me sessions to 2 day's time
+                    .rememberMeParameter("remember-me")
                 .and()
                 .logout()
                     .logoutUrl("/logout")
